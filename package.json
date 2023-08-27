@@ -14,7 +14,7 @@
     "url": "https://github.com/yaacov9/salesforce-snippets--apex-lwc/issues"
   },
   "pricing": "Free",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "engines": {
     "vscode": "^1.81.0"
   },
