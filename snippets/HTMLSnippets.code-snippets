@@ -1,0 +1,9 @@
+{
+  "LWC Spinner": {
+    "prefix": "/spinner",
+    "body": [
+      "<lightning-spinner if:true={${1:isLoading}} alternative-text=\"Loading\" size=\"${2:medium}\" variant=\"brand\"></lightning-spinner>"
+    ],
+    "description": "LWC Spinner"
+  }
+}

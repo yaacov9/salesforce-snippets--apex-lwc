@@ -1,0 +1,40 @@
+{
+  "name": "salesforce-snippets--apex-lwc",
+  "displayName": "Salesforce Snippets (Apex/LWC)",
+  "description": "Code snippets for Salesforce (Apex & LWC) in VS Code.",
+  "publisher": "YaacovElbaz",
+  "author": {
+    "name": "Yaacov Elbaz"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yaacov9/salesforce-snippets--apex-lwc.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yaacov9/salesforce-snippets--apex-lwc/issues"
+  },
+  "pricing": "Free",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.81.0"
+  },
+  "categories": [
+    "Snippets"
+  ],
+  "contributes": {
+    "snippets": [
+      {
+        "language": "apex",
+        "path": "./snippets/ApexSnippets.code-snippets"
+      },
+      {
+        "language": "javascript",
+        "path": "./snippets/JSSnippets.code-snippets"
+      },
+      {
+        "language": "html",
+        "path": "./snippets/HTMLSnippets.code-snippets"
+      }
+    ]
+  }
+}

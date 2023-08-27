@@ -1,0 +1,91 @@
+{
+  "Static Resource LWC": {
+    "prefix": "/static",
+    "body": [
+      "import ${1:staticResourceName} from '@salesforce/resourceUrl/${1:staticResourceName}';"
+    ],
+    "description": "Static Resource LWC"
+  },
+  "Download Static Resource file From LWC": {
+    "prefix": "/dlStatic",
+    "body": [
+      "downloadFile() {",
+      "\tvar link = document.createElement(\"a\");",
+      "\tlink.download = '${1:NameofDownloadedFile.csv}';",
+      "\tlink.href = ${2:staticResourceName};",
+      "\tdocument.body.appendChild(link);",
+      "\tlink.click();",
+      "\tdocument.body.removeChild(link);",
+      "}"
+    ],
+    "description": "Download Static Resource file From LWC"
+  },
+  "Console Log": {
+    "prefix": "con",
+    "body": ["console.log('${1:var} : ', ${1:var});"],
+    "description": "Console Log"
+  },
+  "Apex Method LWC": {
+    "prefix": "/apexCall",
+    "body": [
+      "${1:apexMethodName}({ ${2:recordId} : ${3:this.recordId} })",
+      ".then(result => {",
+      "\t${4://insert code here}",
+      "})",
+      ".catch(e => {",
+      "\tconsole.error(e)",
+      "});"
+    ],
+    "description": "Apex Call LWC"
+  },
+  "Import Apex Class LWC": {
+    "prefix": "/apexImport",
+    "body": [
+      "import ${1:ApexMethodName} from '@salesforce/apex/${2:ApexMethodClass}.${1:ApexMethodName}';"
+    ],
+    "description": "Import Apex Class LWC"
+  },
+  "Import ShowToastEvent LWC": {
+    "prefix": "/ShowToastImport",
+    "body": [
+      "import { ShowToastEvent } from 'lightning/platformShowToastEvent';"
+    ],
+    "description": "Import ShowToastEvent LWC"
+  },
+  "Import UserPermission LWC": {
+    "prefix": "/userPermissionImport",
+    "body": [
+      "import has${1:PermissionName} from '@salesforce/userPermission/${1:PermissionName}';"
+    ],
+    "description": "Import UserPermission LWC"
+  },
+  "Import Label LWC": {
+    "prefix": "/userPermissionImport",
+    "body": [
+      "import ${1:LabelName} from '@salesforce/label/c.${1:LabelName}';"
+    ],
+    "description": "Import Label LWC"
+  },
+  "Wire Method LWC": {
+    "prefix": "/wireMethod",
+    "body": [
+      "@wire(${1:apexMethodName}, { ${2:apexMethodParams} })",
+      "${1:wiredMethodName}({ data, error }) {",
+      "\tif (data) {",
+      "\t\t",
+      "\t} else if (error) {",
+      "\t\tconsole.error(error);",
+      "\t}",
+      "}"
+    ],
+    "description": "Wire Method LWC"
+  },
+  "Wire Property LWC": {
+    "prefix": "/wireProperty",
+    "body": [
+      "@wire(${1:apexMethodName}, { ${2:apexMethodParams} })",
+      "${1:propertyName};"
+    ],
+    "description": "Wire Property LWC"
+  }
+}

@@ -1,0 +1,389 @@
+{
+  "System Debug": {
+    "prefix": "sys",
+    "body": ["System.debug('${1:var} - ' + ${1:var});"],
+    "description": "System debug shortcut"
+  },
+  "Description ApexClass": {
+    "prefix": "/d",
+    "body": [
+      "/** ",
+      "*",
+      "* @author: ${1:Your Name}",
+      "* @since: $CURRENT_DATE/$CURRENT_MONTH/$CURRENT_YEAR",
+      "* Last Modified: ${1:Your Name} $CURRENT_DATE/$CURRENT_MONTH/$CURRENT_YEAR",
+      "*",
+      "* @description: ${2:Placeholder}",
+      "*",
+      "*/"
+    ],
+    "description": "Description ApexClass"
+  },
+  "Description Method": {
+    "prefix": "/dm",
+    "body": [
+      "/**",
+      "  * @summary ${1:summary Description of what the method does}",
+      "  * @param ${2:param1} ",
+      "  * @param ${3:param2}",
+      "  * @return ${4:List<sObject>} ${5:Placeholder}",
+      "*/"
+    ],
+    "description": "Method description"
+  },
+  "Scheduled Batch": {
+    "prefix": "/batch",
+    "body": [
+      "public class ${1:ApexClassName} implements Schedulable, Database.Batchable<sObject>${2:, Database.AllowsCallouts} {",
+      " ",
+      "    public Database.QueryLocator start(Database.BatchableContext bc) {",
+      "        return Database.getQueryLocator('${4:INSERT QUERY HERE}');",
+      "    }",
+      "",
+      "    public void execute(Database.BatchableContext bc, List<sObject> scope) {",
+      "        // process each batch of records",
+      "    }",
+      "",
+      "    public void execute(SchedulableContext ctx){",
+      "        // execute Schedule Class",
+      "        Database.executeBatch(new ${1:ApexClassName}(),${3:200});",
+      "    }",
+      "",
+      "    public void finish(Database.BatchableContext bc) {",
+      "        // execute any post-processing operations - send emails, notify clients,",
+      "    }",
+      " ",
+      "}"
+    ],
+    "description": "Scheduled Batch"
+  },
+  "Mock HTTP Test": {
+    "prefix": "/mock",
+    "body": [
+      "@isTest",
+      "public class ${1:CalloutMockName} implements HttpCalloutMock {",
+      "\tpublic HTTPResponse respond(HTTPRequest req) {",
+      "\t\t// Create a fake response",
+      "\t\tHttpResponse res = new HttpResponse();",
+      "\t\tres.setHeader('Content-Type', 'application/json');",
+      "\t\tres.setBody(${2:'Set JSON Here'});",
+      "\t\tres.setStatusCode(200);",
+      "\t\treturn res;",
+      "\t}",
+      "}"
+    ],
+    "description": "Mock HTTP Test"
+  },
+  "Queueable Class": {
+    "prefix": "/queueable",
+    "body": [
+      "public class ${1:ApexClassName} implements Queueable${2:, Database.AllowsCallouts} { ",
+      "    public void execute(QueueableContext context) {",
+      "        // Your code here",
+      "    }",
+      "}"
+    ],
+    "description": "Queueable Class"
+  },
+  "REST API Callout": {
+    "prefix": "/api",
+    "body": [
+      "HttpRequest req = new HttpRequest();",
+      "req.setHeader('Content-Type', 'application/json');",
+      "req.setMethod('${1:POST}');",
+      "req.setEndpoint('${2:callout:NamedCredentialName}');",
+      "Http http = new Http();",
+      "HttpResponse res = http.send(req);",
+      "System.debug('Response -' + res.getBody());"
+    ],
+    "description": "REST API Callout"
+  },
+  "Get Record Type ID By DeveloperName": {
+    "prefix": "/RTID",
+    "body": [
+      "Id ${1:recordTypeId} = Schema.SObjectType.${2:Account}.getRecordTypeInfosByDeveloperName().get('${3:Developer_Name}').getRecordTypeId();"
+    ],
+    "description": "Get Record Type ID By DeveloperName"
+  },
+  "Test Class Schedulable Batch": {
+    "prefix": "/testBatch",
+    "body": [
+      "//Since we can't check in the same time the batch and the schedulable job, we need to check them separately",
+      "@isTest",
+      "public class ${1:ApexClassName}Test {",
+      "",
+      "    @isTest",
+      "    static void TestBatchable(){",
+      "",
+      "        Test.startTest();",
+      "            Database.executeBatch(new ${1:ApexClassName}());",
+      "        Test.stopTest();",
+      "        //Insert here some System.assertEquals regarding your Batch execution",
+      "    }",
+      "",
+      "    @isTest",
+      "    static void TestSchedulable() {        ",
+      "",
+      "        Test.startTest();",
+      "            System.schedule('Test Schedule ${1:ApexClassName}', '0 0 0 * * ?', new ${1:ApexClassName}());",
+      "        Test.stopTest();",
+      "        List<AsyncApexJob> batchJobs = [SELECT Id, Status FROM AsyncApexJob WHERE ApexClass.Name = '${1:ApexClassName}' AND JobType = 'BatchApex'];        ",
+      "        System.assertEquals(1, batchJobs.size(), 'Unexpected number of batch jobs ran: ' + batchJobs);",
+      "        System.assertEquals('Queued', batchJobs[0].Status, 'Job planned with an unexpected status.');",
+      "",
+      "    }  ",
+      "}"
+    ],
+    "description": "Test Class Schedulable Batch"
+  },
+  "Custom REST API Ressource": {
+    "prefix": "/custAPI",
+    "body": [
+      "@RestResource(urlMapping='/${1:URL}/*')",
+      "public class ${2:ApexClassName}{",
+      "",
+      "    @HttpPost",
+      "    public static void handlePost() {",
+      "        //process POST",
+      "        RestRequest req = RestContext.request;",
+      "        RestResponse res = RestContext.response;",
+      "    }",
+      "",
+      "    @HttpGet",
+      "    public static void handleGet() {",
+      "        //process GET",
+      "        RestRequest req = RestContext.request;",
+      "        RestResponse res = RestContext.response;",
+      "    }",
+      "    ",
+      "}"
+    ],
+    "description": "Custom REST API Ressource"
+  },
+  "Map<Id,List<SObject>>": {
+    "prefix": "/MapList",
+    "body": [
+      "//List<Contact> contactList = [SELECT Id, AccountId FROM Contact];",
+      "//Map<Id,List<Contact>> contactsPerAccountId= new Map<Id,List<Contact>>();",
+      "for (Contact c : contactList) {",
+      "    if (!contactsPerAccountId.containsKey(c.AccountId)) {",
+      "        contactsPerAccountId.put(c.AccountId, new List<Contact>());",
+      "    }",
+      "    contactsPerAccountId.get(c.AccountId).add(p);",
+      "}"
+    ],
+    "description": "Map<Id,List<SObject>>"
+  },
+  "Trigger Creation": {
+    "prefix": "/trigger",
+    "body": [
+      "trigger ${1:TriggerName} on sObject(before insert, after insert, before update, after update, before delete) {",
+      "",
+      "  if(Trigger.isBefore && Trigger.isInsert) {",
+      "    //before insert",
+      "  }",
+      "  if(Trigger.isAfter && Trigger.isInsert) {",
+      "    //after insert",
+      "  }",
+      "  if(Trigger.isBefore && Trigger.isUpdate) {",
+      "    //before update",
+      "  }",
+      "  if(Trigger.isAfter && Trigger.isUpdate) {",
+      "    //after update",
+      "  }",
+      "  if(Trigger.isBefore && Trigger.isDelete){",
+      "    //before delete",
+      "  }",
+      "}"
+    ],
+    "description": "Trigger Creation"
+  },
+  "Create Rest API request form data": {
+    "prefix": "/formData",
+    "body": [
+      "public static HttpRequest createRequest(){",
+      "        HttpRequest req = new HttpRequest();",
+      "        String boundary = '--------------------------310318637524404582432657';",
+      "        String body = createParamsBody(223, 'Description placeholder', boundary);",
+      "        req.setHeader('Content-Type', 'multipart/form-data; boundary=' + boundary);",
+      "        req.setEndpoint('callout:${1:URL}');",
+      "        req.setMethod(${2:'POST'});",
+      "        req.setBody(body);",
+      "        return req;",
+      "    }",
+      "",
+      "",
+      "public static String createParamsBody(Decimal amount, String description, String boundary){",
+      "        //This is just an example ",
+      "        String body = '';",
+      "        ",
+      "        Map<String, Object> mapParams = new Map<String, Object>();",
+      "        mapParams.put('sum', amount);",
+      "        mapParams.put('successUrl', 'https://www.google.com/');",
+      "        mapParams.put('description', description);",
+      "",
+      "        for (String str : mapParams.keySet()) {",
+      "            ",
+      "            String header = '--'+boundary + '\\nContent-Disposition: form-data; name=\"'+str+'\"';",
+      "            String value = '\\n\\n' + mapParams.get(str) + '\\n\\n';",
+      "            ",
+      "            body += header + value;",
+      "        }",
+      "        body += '--'+boundary+'--';",
+      "",
+      "        return body;",
+      "    }"
+    ],
+    "description": "Create Rest API request form data"
+  },
+  "Get All Fields": {
+    "prefix": "/fieldsMap",
+    "body": [
+      "Map<String, Schema.SObjectField> ${1:sObjectFieldsMap} = ${2:Account}.SObjectType.getDescribe().fields.getMap();"
+    ],
+    "description": "Get All Fields"
+  },
+  "JSONWRAPPERResponse": {
+    "prefix": "/GoodJSONWRAPPERRES",
+    "body": [
+      "@RestResource(urlMapping='/AccRetrieveDetails/*')",
+      "global without sharing class AccountDetails{",
+      "   ",
+      "   @httpGet",
+      "   global static JSONWrapper RetrieveAccountDetails(){",
+      "       RestRequest req = RestContext.request;",
+      "       RestResponse res = RestContext.response;",
+      "       List<sObject> sobjList = Database.query(req.params.get('q'));",
+      "       res.statusCode = 200;",
+      "       JSONWrapper resToSend = new JSONWrapper ();",
+      "       resToSend.totalSize = sobjList.size();",
+      "       resToSend.done = true;",
+      "       resToSend.records =  sobjList;",
+      "       ",
+      "       return resToSend;    ",
+      "   }",
+      "   ",
+      "   //We created this class to match the original API response from Salesforce",
+      "   global class JSONWrapper{",
+      "       public Integer totalSize;",
+      "       public boolean done;",
+      "       public List<Account> records;",
+      "   }",
+      "}"
+    ],
+    "description": "JSONWRAPPERResponse"
+  },
+  "Invocable Method": {
+    "prefix": "/Invocable",
+    "body": [
+      "@InvocableMethod(label='${1:ApexInvocableName}')",
+      "public static List<Response> ${1:ApexInvocableName}(List<Request> reqs) {",
+      "    //HERE INSERT PRE-LOGIC",
+      "    List<Response> resList = new List<Response>();",
+      "    //Handle Each Request",
+      "    for (Request req : reqs)",
+      "    {",
+      "        resList.add(handleSingleRequest(req));",
+      "    }",
+      "    return resList;",
+      "}",
+      "",
+      "private static Response handleSingleRequest(Request req){",
+      "    Response res = new Response();",
+      "    try {",
+      "        //HERE INSERT LOGIC",
+      "        ",
+      "    } catch (Exception e) {",
+      "        res.isError = true;",
+      "        res.errorMessage = e.getMessage();",
+      "        System.debug('e.getStackTraceString - ' + e.getStackTraceString());",
+      "    }",
+      "    return res;",
+      "",
+      "}",
+      "",
+      "public class Request {",
+      "    @InvocableVariable(label='${2:accountId}')",
+      "    public String ${2:accountId};",
+      "}",
+      "",
+      "public class Response {",
+      "    @InvocableVariable(label='${3:boolVar}')",
+      "    public Boolean ${3:boolVar};",
+      "",
+      "    @InvocableVariable(label='Is Error')",
+      "    public Boolean isError = false;",
+      "",
+      "    @InvocableVariable(label='Error Message')",
+      "    public String errorMessage;",
+      "}"
+    ],
+    "description": "Invocable Method"
+  },
+  "List": {
+    "prefix": "/newList",
+    "body": ["List<${1:Object}> ${2:listName} = new List<${1:Object}>();"],
+    "description": "Apex List declaration"
+  },
+
+  "Set": {
+    "prefix": "/newSet",
+    "body": ["Set<${1:Object}> ${2:setName} = new Set<${1:Object}>();"],
+    "description": "Apex Set declaration"
+  },
+
+  "Map": {
+    "prefix": "/newMap",
+    "body": [
+      "Map<${1:String}, ${2:Object}> ${3:mapName} = new Map<${1:String}, ${2:Object}>();"
+    ],
+    "description": "Apex Map declaration"
+  },
+  "Add Savepoint": {
+    "prefix": "/savepoint",
+    "body": ["System.Savepoint ${1:savepoint} = Database.setSavepoint();"],
+    "description": "Create Savepoint"
+  },
+
+  "Rollback": {
+    "prefix": "/rollback",
+    "body": ["Database.rollback(${1:savepoint});"],
+    "description": "Rollback"
+  },
+  "SOQL TO Map": {
+    "prefix": "/MapSOQL",
+    "body": [
+      "Map<Id, ${1:Account}> ${1:Account}sMap = new Map<Id, ${1:Account}>([SELECT Id FROM ${1:Account}]);"
+    ],
+    "description": "SOQL TO Map"
+  },
+  "SOQL TO List": {
+    "prefix": "/ListSOQL",
+    "body": [
+      "List<${1:Account}> ${1:Account}sList = [SELECT Id, Name FROM ${1:Account}];"
+    ],
+    "description": "SOQL TO List"
+  },
+  "SOQL": {
+    "prefix": "/SOQL",
+    "body": ["[SELECT Id, Name FROM ${1:Account} WHERE ${2:condition}];"],
+    "description": "SOQL"
+  },
+  "Schedulable Class": {
+    "prefix": "/schedulable",
+    "body": [
+      "public class ${1:ApexClassName} implements Schedulable",
+      "{",
+      "    public void execute(SchedulableContext sc){",
+      "        ${2:funcToExecute}();",
+      "    }",
+      "",
+      "    public void ${2:funcToExecute}(){",
+      "        //HERE INSERT LOGIC",
+      "    }",
+      "}",
+      ""
+    ],
+    "description": "Schedulable Class"
+  }
+}
