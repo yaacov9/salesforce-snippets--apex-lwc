@@ -60,7 +60,7 @@
     "description": "Import UserPermission LWC"
   },
   "Import Label LWC": {
-    "prefix": "/userPermissionImport",
+    "prefix": "/labelImport",
     "body": [
       "import ${1:LabelName} from '@salesforce/label/c.${1:LabelName}';"
     ],
